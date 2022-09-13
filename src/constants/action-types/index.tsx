@@ -1,0 +1,6 @@
+export const ACTION_TYPES: any = {
+  EMPTY_CART: 'EMPTY_CART',
+  SET_CART: 'SET_CART',
+  SET_TOKEN: 'SET_TOKEN',
+  SET_USER: 'SET_USER',
+};
