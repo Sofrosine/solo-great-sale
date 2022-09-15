@@ -96,7 +96,16 @@ const HomePage: FC<Props> = ({navigation}) => {
             data={newsData}
             keyExtractor={(_, index) => index.toString()}
             renderItem={({item}) => (
-              <CardItem image={item?.image?.image} title={item?.name} />
+              <CardItem
+                image={item?.image?.image}
+                title={item?.name}
+                onPress={() =>
+                  navigation.navigate('WebviewPage', {
+                    link: item?.link,
+                    title: item?.name,
+                  })
+                }
+              />
             )}
           />
         </View>

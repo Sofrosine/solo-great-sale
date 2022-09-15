@@ -83,7 +83,7 @@ const TenantDetailPage: React.FC<Props> = ({navigation, route}) => {
                         title: item?.nama_produk,
                       })
                     }
-                    image={item?.image}
+                    image={`https://transaksi.sologreatsale.com${item?.photo_product[0]?.path_file}`}
                     title={item?.nama_produk}
                     subtitle={currencyConverter(item?.harga)}
                   />

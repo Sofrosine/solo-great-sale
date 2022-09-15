@@ -6,6 +6,10 @@ type RootStackParamList = {
     title: string;
   };
   HomePage: undefined;
+  WebviewPage: {
+    link: string;
+    title: string;
+  };
   ProductDetailPage: {
     id: string;
     title: string;

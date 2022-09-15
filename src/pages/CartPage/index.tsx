@@ -46,7 +46,7 @@ const CartPage: FC<Props> = ({navigation}) => {
   );
   const getTotalPrice = () => {
     cartData?.data?.map((cartItem: any) =>
-      setTotalPrice(val => val + cartItem?.harga),
+      setTotalPrice(val => val + cartItem?.harga * cartItem?.qty),
     );
   };
 

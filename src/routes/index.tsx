@@ -4,7 +4,6 @@ import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import Logo from 'assets/images/sgs.png';
 import HeaderView from 'components/HeaderView';
 import Text from 'components/Text';
-import View from 'components/View';
 import CartPage from 'pages/CartPage';
 import CategoryDetailPage from 'pages/CategoryDetailPage';
 import CategoryPage from 'pages/CategoryPage';
@@ -23,6 +22,7 @@ import Color from 'styles/Color';
 import {getSize} from 'utils';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import ScanTenantPage from 'pages/ScanTenantPage';
+import WebviewPage from 'pages/WebviewPage';
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
 
@@ -276,7 +276,19 @@ const Main = () => {
           name="TenantDetailPage"
           component={TenantDetailPage}
           options={{
-            header: ({route}) => {
+            header: ({route}: any) => {
+              const {title} = route?.params || {};
+              return (
+                <HeaderView center={<Text family="latoBold">{title}</Text>} />
+              );
+            },
+          }}
+        />
+        <Stack.Screen
+          name="WebviewPage"
+          component={WebviewPage}
+          options={{
+            header: ({route}: any) => {
               const {title} = route?.params || {};
               return (
                 <HeaderView center={<Text family="latoBold">{title}</Text>} />

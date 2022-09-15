@@ -13,6 +13,9 @@ import {Store} from 'reducers';
 import Color from 'styles/Color';
 import tailwind from 'tailwind-rn';
 import {showToast, useForm} from 'utils';
+import Logo from 'assets/images/sgs.png';
+import FastImage from 'react-native-fast-image';
+import styles from './styles';
 
 type Props = {
   navigation: NativeStackNavigationProp<RootStackParamList, 'Profile'>;
@@ -81,30 +84,40 @@ const ProfilePage: React.FC<Props> = ({navigation}) => {
     <View style={tailwind('flex-1 bg-white px-8')}>
       {userData?.token ? (
         <View style={tailwind('flex-1')} paddingTop={20}>
-          <View style={tailwind('flex-1')}>
-            <Text size={14}>Halo,</Text>
+          <FastImage resizeMode="contain" source={Logo} style={styles.image} />
+          <View marginTop={32} style={tailwind('flex-1')}>
             <Text size={16} family="latoBold">
               {userData?.data.nama_depan} {userData?.data?.nama_belakang}
             </Text>
             <View marginBottom={8} />
-            <Text>
-              Terdaftar sejak:{' '}
-              <Text family="latoBold">
-                {format(
-                  new Date(userData?.data?.created_at ?? new Date()),
-                  'dd MMMM yyyy',
-                )}
+            <Text color={Color.GREY_TEXT} size={12} family="latoBold">
+              {userData?.data?.nomor_hp}
+            </Text>
+            <View marginBottom={2} />
+            <Text color={Color.GREY_TEXT} family="latoBold" size={12}>
+              {userData?.data?.email}
+            </Text>
+            <View
+              marginTop={12}
+              style={[
+                tailwind('border-t border-b'),
+                {borderColor: Color.ALMOST_WHITE},
+              ]}
+              paddingY={16}>
+              <Text>
+                Terdaftar sejak:{' '}
+                <Text family="latoBold">
+                  {format(
+                    new Date(userData?.data?.created_at ?? new Date()),
+                    'dd MMMM yyyy',
+                  )}
+                </Text>
               </Text>
-            </Text>
-            <View marginBottom={4} />
-            <Text size={14}>
-              Nomor Hp:{' '}
-              <Text family="latoBold">{userData?.data?.nomor_hp}</Text>
-            </Text>
-            <View marginBottom={4} />
-            <Text size={14}>
-              Alamat: <Text family="latoBold">{userData?.data?.alamat}</Text>
-            </Text>
+              <View marginBottom={4} />
+              <Text size={14}>
+                Alamat: <Text family="latoBold">{userData?.data?.alamat}</Text>
+              </Text>
+            </View>
           </View>
           <View marginBottom={40}>
             <Button label="Keluar" transparent onPress={handleLogout} />

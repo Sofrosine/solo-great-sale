@@ -3,7 +3,6 @@ import View from 'components/View';
 import React, {FC, memo} from 'react';
 import {TouchableOpacity} from 'react-native';
 import FastImage from 'react-native-fast-image';
-import Logo from 'assets/images/sgs.png';
 import styles from './styles';
 
 type Props = {
