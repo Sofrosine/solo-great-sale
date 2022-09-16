@@ -23,6 +23,8 @@ import {getSize} from 'utils';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import ScanTenantPage from 'pages/ScanTenantPage';
 import WebviewPage from 'pages/WebviewPage';
+import TransactionDetailPage from 'pages/TransactionDetailPage';
+import TransactionPage from 'pages/TransactionPage';
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
 
@@ -292,6 +294,28 @@ const Main = () => {
               const {title} = route?.params || {};
               return (
                 <HeaderView center={<Text family="latoBold">{title}</Text>} />
+              );
+            },
+          }}
+        />
+        <Stack.Screen
+          name="TransactionDetailPage"
+          component={TransactionDetailPage}
+          options={{
+            header: ({}: any) => {
+              return <HeaderView title="Invoice" />;
+            },
+          }}
+        />
+        <Stack.Screen
+          name="TransactionPage"
+          component={TransactionPage}
+          options={{
+            header: () => {
+              return (
+                <HeaderView
+                  center={<Text family="latoBold">Daftar Transaksi</Text>}
+                />
               );
             },
           }}

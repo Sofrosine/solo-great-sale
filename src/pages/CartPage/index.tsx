@@ -1,24 +1,24 @@
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import {CommonActions, useFocusEffect} from '@react-navigation/native';
+import {NativeStackNavigationProp} from '@react-navigation/native-stack';
+import {emptyCart} from 'actions/cart-action';
 import Button from 'components/Button';
 import CartItem from 'components/CartItem';
+import Dropdown from 'components/Dropdown';
 import Text from 'components/Text';
 import View from 'components/View';
-import Dropdown from 'components/Dropdown';
-import React, {FC, useCallback, useContext, useEffect, useState} from 'react';
-import {Alert, FlatList, ScrollView} from 'react-native';
-import {Store} from 'reducers';
-import tailwind from 'tailwind-rn';
-import styles from './styles';
-import {PAYMENT_METHOD} from 'constants';
-import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
-import FastImage from 'react-native-fast-image';
-import Color from 'styles/Color';
-import {currencyConverter, showToast} from 'utils';
 import useCheckout from 'queries/checkout/useCheckout';
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import {emptyCart} from 'actions/cart-action';
-import {NativeStackNavigationProp} from '@react-navigation/native-stack';
-import {CommonActions, useFocusEffect} from '@react-navigation/native';
 import useGetPaymentMethod from 'queries/checkout/useGetPaymentMethod';
+import usePostQrisGenerate from 'queries/transaction/usePostQrisGenerate';
+import React, {FC, useCallback, useContext, useState} from 'react';
+import {Alert, FlatList, ScrollView} from 'react-native';
+import FastImage from 'react-native-fast-image';
+import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
+import {Store} from 'reducers';
+import Color from 'styles/Color';
+import tailwind from 'tailwind-rn';
+import {currencyConverter, showToast} from 'utils';
+import styles from './styles';
 
 type Props = {
   navigation: NativeStackNavigationProp<RootStackParamList, 'Cart'>;
@@ -31,17 +31,20 @@ const CartPage: FC<Props> = ({navigation}) => {
   const [paymentProof, setPaymentProof] = useState<any>(null);
   const [totalPrice, setTotalPrice] = useState(0);
   const [loading, setLoading] = useState(false);
+  const [isQris, setQris] = useState(0);
 
   const [userData] = user;
   const [cartData, dispatchCart] = cart;
 
   const {mutate: checkoutMutate} = useCheckout({token: userData?.token});
   const {data: paymentMethodData} = useGetPaymentMethod();
+  const {mutateAsync: qrisMutate} = usePostQrisGenerate();
 
   useFocusEffect(
     useCallback(() => {
       getTotalPrice();
       return () => setTotalPrice(0);
+      // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [cartData]),
   );
   const getTotalPrice = () => {
@@ -119,30 +122,58 @@ const CartPage: FC<Props> = ({navigation}) => {
         type: 'image/jpeg', // or photo.type
         name: 'proof.jpg',
       });
+      formData?.append('is_qris', isQris);
 
       checkoutMutate(
         {
           data: formData,
         },
         {
-          onSuccess: res => {
+          onSuccess: async res => {
             if (res?.status) {
+              if (isQris) {
+                await qrisMutate(
+                  {
+                    data: {
+                      id_transaksi: res?.data?.id,
+                      _token: userData?.token,
+                    },
+                  },
+                  {
+                    onSettled: () => {
+                      navigation.dispatch(
+                        CommonActions.reset({
+                          index: 1,
+                          routes: [
+                            {name: 'HomePage'},
+                            {
+                              name: 'TransactionDetailPage',
+                              params: {id: res?.data?.id},
+                            },
+                          ],
+                        }),
+                      );
+                    },
+                  },
+                );
+                setLoading(false);
+              } else {
+                navigation.dispatch(
+                  CommonActions.reset({
+                    index: 0,
+                    routes: [{name: 'HomePage'}],
+                  }),
+                );
+                setLoading(false);
+              }
               showToast(res?.message);
               AsyncStorage.removeItem('cart');
               dispatchCart(emptyCart());
-              navigation.dispatch(
-                CommonActions.reset({
-                  index: 0,
-                  routes: [{name: 'HomePage'}],
-                }),
-              );
+              setLoading(false);
             }
           },
           onError: err => {
             console.log('err', err);
-          },
-          onSettled: () => {
-            setLoading(false);
           },
         },
       );
@@ -188,12 +219,13 @@ const CartPage: FC<Props> = ({navigation}) => {
                 id: '1',
                 sub: paymentMethodData || [],
               }}
-              onPress={item =>
+              onPress={item => {
                 setPayment({
                   label: item?.label,
                   id: item?.id,
-                })
-              }
+                });
+                setQris(item?.isQris);
+              }}
             />
           </View>
           <View style={styles.divider} />

@@ -8,10 +8,12 @@ export default function useGetPaymentMethod() {
     async ({signal}) => {
       const response = await get(API_URL.PAYMENT_METHOD, '', {signal});
       let arr: any[] = [];
+
       response?.data?.map((item: any) => {
         arr.push({
           id: item?.id,
           label: item?.nama,
+          isQris: item?.is_qris,
         });
       });
 

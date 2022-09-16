@@ -22,4 +22,8 @@ type RootStackParamList = {
     id: string;
     title?: string;
   };
+  TransactionDetailPage: {
+    id: number;
+  };
+  TransactionPage: undefined;
 };

@@ -89,8 +89,9 @@ const Dropdown: FC<Props> = ({
         </View>
       )}
       {isExpanded &&
-        item?.sub?.map(subItem => (
+        item?.sub?.map((subItem, index) => (
           <TouchableOpacity
+            key={index}
             onPress={() => {
               onPress && onPress(subItem);
               setExpand(false);

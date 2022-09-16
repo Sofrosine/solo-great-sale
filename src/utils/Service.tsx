@@ -29,8 +29,8 @@ export const post = async (
       data,
       headers: finalHeaders,
     });
-    if (response?.data?.status) {
-      return response?.data;
+    if (response?.data?.status || response?.status) {
+      return response?.data || response;
     } else {
       showToast(response?.data?.message);
     }

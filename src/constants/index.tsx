@@ -40,3 +40,21 @@ export const PAYMENT_METHOD = [
     label: 'Dana',
   },
 ];
+
+export const INVOICE_LIST = [
+  {
+    title: 'Tenant',
+  },
+  {
+    title: 'Nomor',
+  },
+  {
+    title: 'Tanggal',
+  },
+  {
+    title: 'Pembayaran',
+  },
+  {
+    title: 'Pembeli',
+  },
+];

@@ -12,9 +12,12 @@ export default {
   PRODUCT_DETAIL: '/mobile/produk_detail',
   PRODUCT_RECOMMENDATION: '/mobile/produk-unggulan',
   PROVINCE: '/mobile/provinsi',
+  QRIS: '/mobile/qris-generate',
   REGISTER: '/mobile/register',
   SLIDER: '/mobile/slider',
   SPONSOR: '/mobile/sponsor',
   TENANT: '/mobile/tenant',
   TENANT_RECOMMENDATION: '/mobile/tenant-unggulan',
+  TRANSACTION: '/mobile/transaksi',
+  TRANSACTION_DETAIL: '/mobile/transaksi-detail',
 };

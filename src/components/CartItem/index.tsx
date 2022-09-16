@@ -16,24 +16,24 @@ const CartItem: FC<Props> = ({item}) => {
     <View style={tailwind('flex-row ')}>
       <FastImage
         source={{
-          uri: item?.image_path_file,
+          uri: item?.image_path_file || item?.img_url,
           priority: FastImage.priority.high,
         }}
         style={styles.image}
       />
       <View style={tailwind('flex-1')} marginLeft={16}>
-        <Text family="latoBold">{item?.nama_produk}</Text>
+        <Text family="latoBold">{item?.nama_produk || item?.goods_name}</Text>
         <View marginBottom={2} />
         <Text color={Color.GREY_TEXT} size={12}>
           {item?.tenant?.nama_pemilik}
         </Text>
         <View marginBottom={4} />
-        <Text>{currencyConverter(item?.harga)}</Text>
+        <Text>{currencyConverter(item?.harga || item?.goods_amt)}</Text>
         <View marginBottom={8} />
         <View
           style={tailwind('self-start px-4 py-2 rounded-lg')}
           color={Color.ALMOST_WHITE}>
-          <Text size={10}>Jumlah: {item?.qty}</Text>
+          <Text size={10}>Jumlah: {item?.qty || item?.goods_qty}</Text>
         </View>
       </View>
     </View>

@@ -12,10 +12,12 @@ import React, {useContext, useState} from 'react';
 import {Store} from 'reducers';
 import Color from 'styles/Color';
 import tailwind from 'tailwind-rn';
-import {showToast, useForm} from 'utils';
+import {getSize, showToast, useForm} from 'utils';
 import Logo from 'assets/images/sgs.png';
 import FastImage from 'react-native-fast-image';
+import Feather from 'react-native-vector-icons/Feather';
 import styles from './styles';
+import {TouchableOpacity} from 'react-native';
 
 type Props = {
   navigation: NativeStackNavigationProp<RootStackParamList, 'Profile'>;
@@ -99,10 +101,7 @@ const ProfilePage: React.FC<Props> = ({navigation}) => {
             </Text>
             <View
               marginTop={12}
-              style={[
-                tailwind('border-t border-b'),
-                {borderColor: Color.ALMOST_WHITE},
-              ]}
+              style={[tailwind('border-t border-b'), {borderColor: Color.GREY}]}
               paddingY={16}>
               <Text>
                 Terdaftar sejak:{' '}
@@ -118,6 +117,20 @@ const ProfilePage: React.FC<Props> = ({navigation}) => {
                 Alamat: <Text family="latoBold">{userData?.data?.alamat}</Text>
               </Text>
             </View>
+            <TouchableOpacity
+              onPress={() => navigation.navigate('TransactionPage')}
+              style={[
+                tailwind('flex-row mt-2 justify-between py-2 items-center'),
+              ]}>
+              <Text size={14} family="latoBold">
+                Daftar Transaksi
+              </Text>
+              <Feather
+                name="chevron-right"
+                color={Color.ALMOST_BLACK}
+                size={getSize(20)}
+              />
+            </TouchableOpacity>
           </View>
           <View marginBottom={40}>
             <Button label="Keluar" transparent onPress={handleLogout} />
