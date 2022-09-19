@@ -20,6 +20,7 @@ export default {
   TENANT: '/mobile/tenant',
   TENANT_BY_CATEGORY: '/mobile/categories-tenant',
   TENANT_RECOMMENDATION: '/mobile/tenant-unggulan',
+  TOC: '/mobile/config/toc',
   TRANSACTION: '/mobile/transaksi',
   TRANSACTION_DETAIL: '/mobile/transaksi-detail',
 };

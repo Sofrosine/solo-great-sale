@@ -11,13 +11,18 @@ import useCheckout from 'queries/checkout/useCheckout';
 import useGetPaymentMethod from 'queries/checkout/useGetPaymentMethod';
 import usePostQrisGenerate from 'queries/transaction/usePostQrisGenerate';
 import React, {FC, useCallback, useContext, useState} from 'react';
-import {Alert, FlatList, ScrollView} from 'react-native';
+import {Alert, FlatList, ScrollView, TouchableOpacity} from 'react-native';
 import FastImage from 'react-native-fast-image';
 import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
+import RenderHTML from 'react-native-render-html';
+import Feather from 'react-native-vector-icons/Feather';
 import {Store} from 'reducers';
 import Color from 'styles/Color';
 import tailwind from 'tailwind-rn';
-import {currencyConverter, showToast} from 'utils';
+import {currencyConverter, deviceWidth, showToast} from 'utils';
+
+import useGetToc from 'queries/checkout/useGetToc';
+import ContentLoader from 'react-native-easy-content-loader';
 import styles from './styles';
 
 type Props = {
@@ -32,12 +37,15 @@ const CartPage: FC<Props> = ({navigation}) => {
   const [totalPrice, setTotalPrice] = useState(0);
   const [loading, setLoading] = useState(false);
   const [isQris, setQris] = useState(0);
+  const [tocSelected, setTocSelected] = useState(false);
 
   const [userData] = user;
   const [cartData, dispatchCart] = cart;
 
-  const {mutate: checkoutMutate} = useCheckout({token: userData?.token});
   const {data: paymentMethodData} = useGetPaymentMethod();
+  const {data: tocData, isFetching: tocFetching} = useGetToc();
+
+  const {mutate: checkoutMutate} = useCheckout({token: userData?.token});
   const {mutateAsync: qrisMutate} = usePostQrisGenerate();
 
   useFocusEffect(
@@ -129,6 +137,11 @@ const CartPage: FC<Props> = ({navigation}) => {
       isValidate = false;
     }
 
+    if (!tocSelected) {
+      showToast('Harap menyetujui persyaratan dan ketentuan yang berlaku');
+      isValidate = false;
+    }
+
     return isValidate;
   };
 
@@ -207,6 +220,12 @@ const CartPage: FC<Props> = ({navigation}) => {
     }
   };
 
+  const source = {
+    html: `
+${tocData?.data}
+  `,
+  };
+
   return (
     <View style={tailwind('flex-1 bg-white')}>
       {cartData?.data?.length > 0 ? (
@@ -270,13 +289,53 @@ const CartPage: FC<Props> = ({navigation}) => {
             </View>
             <View
               marginTop={8}
-              marginBottom={40}
               style={tailwind('flex-row items-center justify-between')}>
               <Text size={12} color={Color.GREY_TEXT}>
                 Kupon:
               </Text>
               <Text>{Math.floor(totalPrice / 50000)}</Text>
             </View>
+            <View marginTop={16}>
+              <Text size={16} family="latoBold">
+                Terms Of Condition
+              </Text>
+              <ContentLoader
+                containerStyles={tailwind('my-4')}
+                loading={tocFetching}>
+                <RenderHTML
+                  tagsStyles={{
+                    p: {color: Color.ALMOST_BLACK},
+                    li: {
+                      color: Color.GREY_TEXT,
+                    },
+                    b: {},
+                  }}
+                  contentWidth={deviceWidth}
+                  source={source}
+                />
+                <View marginBottom={20}>
+                  <TouchableOpacity
+                    onPress={() => {
+                      setTocSelected(!tocSelected);
+                    }}
+                    style={tailwind('flex-row items-center')}>
+                    <Feather
+                      name={tocSelected ? 'check-square' : 'square'}
+                      color={tocSelected ? Color.PRIMARY : Color.GREY}
+                      size={24}
+                    />
+                    <View marginRight={8} />
+                    <View style={tailwind('flex-1')}>
+                      <Text size={12}>
+                        Saya telah membaca persyaratan dan ketentuan yang
+                        berlaku di Terms Of Conditions.
+                      </Text>
+                    </View>
+                  </TouchableOpacity>
+                </View>
+              </ContentLoader>
+            </View>
+
             <Button
               onPress={handleSubmit}
               loading={loading}
