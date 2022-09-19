@@ -101,7 +101,7 @@ const HomePage: FC<Props> = ({navigation}) => {
                 title={item?.name}
                 onPress={() =>
                   navigation.navigate('WebviewPage', {
-                    link: item?.link,
+                    link: `https://sologreatsale.com/activities/${item?.slug}`,
                     title: item?.name,
                   })
                 }
