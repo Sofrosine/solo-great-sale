@@ -17,7 +17,7 @@ import Logo from 'assets/images/sgs.png';
 import FastImage from 'react-native-fast-image';
 import Feather from 'react-native-vector-icons/Feather';
 import styles from './styles';
-import {TouchableOpacity} from 'react-native';
+import {Alert, TouchableOpacity} from 'react-native';
 
 type Props = {
   navigation: NativeStackNavigationProp<RootStackParamList, 'Profile'>;
@@ -75,6 +75,20 @@ const ProfilePage: React.FC<Props> = ({navigation}) => {
     }
   };
 
+  const showLogoutAlert = () =>
+    Alert.alert('Keluar', 'Apakah Anda yakin ingin keluar?', [
+      {
+        text: 'Batalkan',
+        style: 'cancel',
+      },
+      {
+        text: 'Yakin',
+        onPress: () => {
+          handleLogout();
+        },
+      },
+    ]);
+
   const handleLogout = () => {
     AsyncStorage.clear();
     dispatchUser(setUser(null));
@@ -89,7 +103,7 @@ const ProfilePage: React.FC<Props> = ({navigation}) => {
           <FastImage resizeMode="contain" source={Logo} style={styles.image} />
           <View marginTop={32} style={tailwind('flex-1')}>
             <Text size={16} family="latoBold">
-              {userData?.data.nama_depan} {userData?.data?.nama_belakang}
+              {userData?.data?.nama_depan} {userData?.data?.nama_belakang}
             </Text>
             <View marginBottom={8} />
             <Text color={Color.GREY_TEXT} size={12} family="latoBold">
@@ -133,7 +147,7 @@ const ProfilePage: React.FC<Props> = ({navigation}) => {
             </TouchableOpacity>
           </View>
           <View marginBottom={40}>
-            <Button label="Keluar" transparent onPress={handleLogout} />
+            <Button label="Keluar" transparent onPress={showLogoutAlert} />
           </View>
         </View>
       ) : (
@@ -143,6 +157,7 @@ const ProfilePage: React.FC<Props> = ({navigation}) => {
           </Text>
           <View style={tailwind('w-full')}>
             <TextInput
+              keyboardType="email-address"
               onChangeText={val => setForm({email: val})}
               value={form.email}
               placeholder="Masukkan email"

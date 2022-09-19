@@ -121,7 +121,9 @@ const TransactionDetailPage: React.FC<Props> = ({route}) => {
           <FlatList
             data={realData?.result?.cart?.item?.item ?? []}
             keyExtractor={(_, index) => index.toString()}
-            renderItem={({item}) => <CartItem item={item} />}
+            renderItem={({item}) => (
+              <CartItem item={{...item, harga: trxData?.total_amount}} noQty />
+            )}
             ItemSeparatorComponent={() => <View marginY={8} />}
           />
           <View marginY={16} style={tailwind('h-px')} color={Color.GREY} />

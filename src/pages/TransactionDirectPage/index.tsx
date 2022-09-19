@@ -1,7 +1,7 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {CommonActions, useFocusEffect} from '@react-navigation/native';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
-import {emptyCart, setCart} from 'actions/cart-action';
+import {emptyCart} from 'actions/cart-action';
 import Button from 'components/Button';
 import CartItem from 'components/CartItem';
 import Dropdown from 'components/Dropdown';
@@ -9,6 +9,7 @@ import Text from 'components/Text';
 import View from 'components/View';
 import useCheckout from 'queries/checkout/useCheckout';
 import useGetPaymentMethod from 'queries/checkout/useGetPaymentMethod';
+import useGetProductDirect from 'queries/product/useGetProductDirect';
 import usePostQrisGenerate from 'queries/transaction/usePostQrisGenerate';
 import React, {FC, useCallback, useContext, useState} from 'react';
 import {Alert, FlatList, ScrollView} from 'react-native';
@@ -24,7 +25,7 @@ type Props = {
   navigation: NativeStackNavigationProp<RootStackParamList, 'Cart'>;
 };
 
-const CartPage: FC<Props> = ({navigation}) => {
+const TransactionDirectPage: FC<Props> = ({navigation}) => {
   const {cart, user} = useContext(Store);
 
   const [selectedPayment, setPayment] = useState<any>(null);
@@ -36,54 +37,15 @@ const CartPage: FC<Props> = ({navigation}) => {
   const [userData] = user;
   const [cartData, dispatchCart] = cart;
 
-  const {mutate: checkoutMutate} = useCheckout({token: userData?.token});
   const {data: paymentMethodData} = useGetPaymentMethod();
+  const {data: productDirectData} = useGetProductDirect();
+  const {mutate: checkoutMutate} = useCheckout({token: userData?.token});
   const {mutateAsync: qrisMutate} = usePostQrisGenerate();
-
-  useFocusEffect(
-    useCallback(() => {
-      getTotalPrice();
-      return () => setTotalPrice(0);
-      // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [cartData]),
-  );
-
-  const getTotalPrice = () => {
-    cartData?.data?.map((cartItem: any) =>
-      setTotalPrice(val => val + cartItem?.harga * cartItem?.qty),
-    );
-  };
-
-  const handleDelete = (item: any) => {
-    let arr = [...cartData?.data];
-    arr = arr.filter(cartItem => cartItem?.id !== item?.id);
-    setTotalPrice(0);
-    arr?.map((cartItem: any) =>
-      setTotalPrice(val => val + cartItem?.harga * cartItem?.qty),
-    );
-    dispatchCart(setCart(arr));
-    AsyncStorage.setItem('cart', JSON.stringify(arr));
-    showToast('Berhasil menghapus produk');
-  };
-
-  const showDeleteAlert = (item: any) =>
-    Alert.alert('Hapus item', 'Apakah Anda yakin ingin menghapus item ini?', [
-      {
-        text: 'Batalkan',
-        style: 'cancel',
-      },
-      {
-        text: 'Yakin',
-        onPress: () => {
-          handleDelete(item);
-        },
-      },
-    ]);
 
   const createThreeButtonAlert = () =>
     Alert.alert('Pilih file', 'Pilih option untuk upload foto', [
       {
-        text: 'Batalkan',
+        text: 'Cancel',
         style: 'cancel',
       },
       {
@@ -119,6 +81,11 @@ const CartPage: FC<Props> = ({navigation}) => {
   const validate = () => {
     let isValidate = true;
 
+    if (!totalPrice) {
+      showToast('Silahkan masukkan total harga terlebih dahulu');
+      isValidate = false;
+    }
+
     if (!paymentProof) {
       showToast('Upload bukti transaksi terlebih dahulu');
       isValidate = false;
@@ -138,11 +105,11 @@ const CartPage: FC<Props> = ({navigation}) => {
       const formData = new FormData();
       formData?.append('_token', userData?.token);
       formData?.append('id_jenis_payment', selectedPayment?.id);
-      cartData?.data?.map((val: any, index: number) => {
-        formData?.append(`carts[${index}][harga]`, val?.harga);
-        formData?.append(`carts[${index}][quantity]`, val?.qty);
+      productDirectData?.map((val: any, index: number) => {
+        formData?.append(`carts[${index}][harga]`, totalPrice);
+        formData?.append(`carts[${index}][quantity]`, 1);
         formData?.append(`carts[${index}][id]`, val?.id);
-        formData?.append(`carts[${index}][id_tenant]`, val?.tenant?.id);
+        formData?.append(`carts[${index}][id_tenant]`, val?.id_tenant);
       });
       formData?.append('bukti_transaksi', {
         uri: paymentProof,
@@ -209,90 +176,90 @@ const CartPage: FC<Props> = ({navigation}) => {
 
   return (
     <View style={tailwind('flex-1 bg-white')}>
-      {cartData?.data?.length > 0 ? (
-        <ScrollView>
-          <FlatList
-            contentContainerStyle={tailwind('p-4')}
-            data={cartData?.data}
-            keyExtractor={(_, index) => index.toString()}
-            renderItem={({item}) => (
-              <CartItem onDelete={() => showDeleteAlert(item)} item={item} />
-            )}
-            ItemSeparatorComponent={() => <View marginY={8} />}
+      <ScrollView>
+        <FlatList
+          contentContainerStyle={tailwind('p-4')}
+          data={productDirectData}
+          keyExtractor={(_, index) => index.toString()}
+          renderItem={({item}) => (
+            <CartItem
+              item={item}
+              isDirect
+              inputValue={totalPrice}
+              onChangeText={val => {
+                setTotalPrice(Number(val));
+                console.log(val);
+              }}
+            />
+          )}
+          ItemSeparatorComponent={() => <View marginY={8} />}
+        />
+        <View style={styles.divider} />
+        <View paddingX={20} paddingY={8}>
+          <Text family="latoBold">Bukti Transaksi</Text>
+          <View marginBottom={16} />
+          {paymentProof && (
+            <View marginY={16}>
+              <FastImage
+                source={{
+                  uri: paymentProof,
+                  priority: FastImage.priority.high,
+                }}
+                style={styles.imageProof}
+              />
+            </View>
+          )}
+          <Button
+            onPress={createThreeButtonAlert}
+            label="Pilih file"
+            transparent
           />
-          <View style={styles.divider} />
-          <View paddingX={20} paddingY={8}>
-            <Text family="latoBold">Bukti Transaksi</Text>
-            <View marginBottom={16} />
-            {paymentProof && (
-              <View marginY={16}>
-                <FastImage
-                  source={{
-                    uri: paymentProof,
-                    priority: FastImage.priority.high,
-                  }}
-                  style={styles.imageProof}
-                />
-              </View>
-            )}
-            <Button
-              onPress={createThreeButtonAlert}
-              label="Pilih file"
-              transparent
-            />
-          </View>
-          <View paddingY={8}>
-            <Dropdown
-              item={{
-                label: selectedPayment?.label ?? 'Pilih Jenis Pembayaran',
-                id: '1',
-                sub: paymentMethodData || [],
-              }}
-              onPress={item => {
-                setPayment({
-                  label: item?.label,
-                  id: item?.id,
-                });
-                setQris(item?.isQris);
-              }}
-            />
-          </View>
-          <View style={styles.divider} />
-          <View paddingX={20} paddingTop={16} paddingBottom={40}>
-            <Text family="latoBold">Detail Pembayaran:</Text>
-            <View
-              marginTop={8}
-              style={tailwind('flex-row items-center justify-between')}>
-              <Text size={12} color={Color.GREY_TEXT}>
-                Total:
-              </Text>
-              <Text>{currencyConverter(totalPrice)}</Text>
-            </View>
-            <View
-              marginTop={8}
-              marginBottom={40}
-              style={tailwind('flex-row items-center justify-between')}>
-              <Text size={12} color={Color.GREY_TEXT}>
-                Kupon:
-              </Text>
-              <Text>{Math.floor(totalPrice / 50000)}</Text>
-            </View>
-            <Button
-              onPress={handleSubmit}
-              loading={loading}
-              label="KONFIRMASI CHECKOUT"
-            />
-          </View>
-        </ScrollView>
-      ) : (
-        <View style={tailwind('flex-1 justify-center items-center')}>
-          <Text family="latoBold" size={16}>
-            Keranjang kamu masih kosong.
-          </Text>
         </View>
-      )}
+        <View paddingY={8}>
+          <Dropdown
+            item={{
+              label: selectedPayment?.label ?? 'Pilih Jenis Pembayaran',
+              id: '1',
+              sub: paymentMethodData || [],
+            }}
+            onPress={item => {
+              setPayment({
+                label: item?.label,
+                id: item?.id,
+              });
+              setQris(item?.isQris);
+            }}
+          />
+        </View>
+        <View style={styles.divider} />
+        <View paddingX={20} paddingTop={16} paddingBottom={40}>
+          <Text family="latoBold">Detail Pembayaran:</Text>
+          <View
+            marginTop={8}
+            style={tailwind('flex-row items-center justify-between')}>
+            <Text size={12} color={Color.GREY_TEXT}>
+              Total:
+            </Text>
+            <Text>{currencyConverter(totalPrice)}</Text>
+          </View>
+          <View
+            marginTop={8}
+            marginBottom={40}
+            style={tailwind('flex-row items-center justify-between')}>
+            <Text size={12} color={Color.GREY_TEXT}>
+              Kupon:
+            </Text>
+            <Text>{Math.floor(totalPrice / 50000)}</Text>
+          </View>
+          <Button
+            onPress={handleSubmit}
+            loading={loading}
+            label="KONFIRMASI CHECKOUT"
+          />
+        </View>
+      </ScrollView>
     </View>
   );
 };
 
-export default CartPage;
+export default TransactionDirectPage;

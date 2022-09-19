@@ -29,7 +29,7 @@ const HomePage: FC<Props> = ({navigation}) => {
 
   return (
     <View style={tailwind('flex-1 bg-white')}>
-      <ScrollView>
+      <ScrollView contentContainerStyle={tailwind('pb-12')}>
         <View color={Color.WHITE}>
           <BannerHome data={sliderData} />
         </View>

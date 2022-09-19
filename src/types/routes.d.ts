@@ -25,5 +25,6 @@ type RootStackParamList = {
   TransactionDetailPage: {
     id: number;
   };
+  TransactionDirectPage: undefined;
   TransactionPage: undefined;
 };

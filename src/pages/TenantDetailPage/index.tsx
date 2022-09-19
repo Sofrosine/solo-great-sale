@@ -3,7 +3,7 @@ import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import Text from 'components/Text';
 import View from 'components/View';
 import useGetTenantDetail from 'queries/tenant/useGetTenantDetail';
-import React, {useEffect} from 'react';
+import React, {useContext, useEffect} from 'react';
 import {FlatList, ScrollView} from 'react-native';
 import ContentLoader from 'react-native-easy-content-loader';
 import FastImage from 'react-native-fast-image';
@@ -13,7 +13,9 @@ import Logo from 'assets/images/sgs.png';
 
 import styles from './styles';
 import CardItem from 'components/CardItem';
-import {currencyConverter} from 'utils';
+import {currencyConverter, showToast} from 'utils';
+import Button from 'components/Button';
+import {Store} from 'reducers';
 
 type Props = {
   navigation: NativeStackNavigationProp<RootStackParamList, 'TenantDetailPage'>;
@@ -22,6 +24,9 @@ type Props = {
 
 const TenantDetailPage: React.FC<Props> = ({navigation, route}) => {
   const {id, title} = route?.params || {};
+
+  const {user} = useContext(Store);
+  const [userData] = user;
 
   const {data: tenantData, isFetching: loadingTenant} = useGetTenantDetail({
     id,
@@ -93,6 +98,19 @@ const TenantDetailPage: React.FC<Props> = ({navigation, route}) => {
           </View>
         </ContentLoader>
       </ScrollView>
+      <View paddingY={24} paddingX={20}>
+        <Button
+          onPress={() => {
+            if (!userData?.token) {
+              showToast('Harap masuk terlebih dahulu');
+              navigation.navigate('Profile');
+            } else {
+              navigation.navigate('TransactionDirectPage');
+            }
+          }}
+          label="Transaksi Langsung"
+        />
+      </View>
     </View>
   );
 };

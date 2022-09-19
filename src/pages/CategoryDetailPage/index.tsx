@@ -3,14 +3,15 @@ import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import CardItem from 'components/CardItem';
 import HeaderView from 'components/HeaderView';
 import View from 'components/View';
-import useFilterCategory from 'queries/categories/useFilterCategory';
-import React, {FC, useLayoutEffect} from 'react';
+import useGetTenantByCategory from 'queries/tenant/useGetTenantByCategory';
+
+import React, {FC, useLayoutEffect, useState} from 'react';
 import {FlatList, TouchableOpacity} from 'react-native';
 import ContentLoader from 'react-native-easy-content-loader';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import Color from 'styles/Color';
 import tailwind from 'tailwind-rn';
-import {currencyConverter} from 'utils';
+import styles from './styles';
 
 type Props = {
   navigation: NativeStackNavigationProp<
@@ -23,8 +24,8 @@ type Props = {
 const CategoryDetailPage: FC<Props> = ({route, navigation}) => {
   const {id, title} = route?.params || {};
 
-  const {data: filterCategoryData, isFetching: isCategoryFetching} =
-    useFilterCategory({id});
+  const {data: tenantByCategoryData, isFetching: isCategoryFetching} =
+    useGetTenantByCategory({id});
 
   useLayoutEffect(() => {
     navigation.setOptions({
@@ -45,8 +46,6 @@ const CategoryDetailPage: FC<Props> = ({route, navigation}) => {
     });
   });
 
-  console.log('aha', filterCategoryData);
-
   return (
     <View>
       <ContentLoader
@@ -56,23 +55,23 @@ const CategoryDetailPage: FC<Props> = ({route, navigation}) => {
         tHeight={40}>
         <FlatList
           numColumns={2}
-          data={filterCategoryData}
+          data={tenantByCategoryData}
           contentContainerStyle={tailwind('py-8')}
-          columnWrapperStyle={tailwind('justify-center')}
           keyExtractor={(_, index) => index.toString()}
           ItemSeparatorComponent={() => <View marginY={8} />}
           renderItem={({item}) => (
-            <View marginX={8}>
+            <View style={styles.cardContainer} marginX={8}>
               <CardItem
                 onPress={() =>
-                  navigation.navigate('ProductDetailPage', {
-                    id: item?.id,
-                    title: item?.nama_produk,
+                  navigation.navigate('TenantDetailPage', {
+                    id: item?.id_tenant,
+                    title: item?.tenant?.nama_pemilik,
                   })
                 }
-                image={item?.image}
-                title={item?.nama_produk}
-                subtitle={currencyConverter(item?.harga)}
+                image={
+                  'http://transaksi.sologreatsale.com' + item?.tenant?.path_logo
+                }
+                title={item?.tenant?.nama_pemilik}
               />
             </View>
           )}

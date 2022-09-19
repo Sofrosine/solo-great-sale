@@ -25,6 +25,8 @@ import ScanTenantPage from 'pages/ScanTenantPage';
 import WebviewPage from 'pages/WebviewPage';
 import TransactionDetailPage from 'pages/TransactionDetailPage';
 import TransactionPage from 'pages/TransactionPage';
+import TransactionDirectPage from 'pages/TransactionDirectPage';
+import View from 'components/View';
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
 
@@ -315,6 +317,20 @@ const Main = () => {
               return (
                 <HeaderView
                   center={<Text family="latoBold">Daftar Transaksi</Text>}
+                />
+              );
+            },
+          }}
+        />
+        <Stack.Screen
+          name="TransactionDirectPage"
+          component={TransactionDirectPage}
+          options={{
+            header: () => {
+              return (
+                <HeaderView
+                  center={<Text family="latoBold">Transaksi Langsung</Text>}
+                  right={<View />}
                 />
               );
             },

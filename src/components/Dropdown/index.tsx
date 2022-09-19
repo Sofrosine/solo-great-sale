@@ -22,6 +22,7 @@ type Props = {
   error?: boolean;
   errorMessage?: string;
   onFocus?: () => void;
+  extensionLabel?: string;
 };
 
 const Dropdown: FC<Props> = ({
@@ -33,6 +34,7 @@ const Dropdown: FC<Props> = ({
   error,
   errorMessage,
   onFocus,
+  extensionLabel,
 }) => {
   const [isExpanded, setExpand] = useState(false);
 

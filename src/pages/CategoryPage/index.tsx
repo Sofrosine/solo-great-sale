@@ -22,8 +22,8 @@ const CategoryPage: FC<Props> = ({navigation}) => {
           <Dropdown
             onPress={categoryItem =>
               navigation.navigate('CategoryDetailPage', {
-                title: categoryItem?.nama_kategori || categoryItem?.label,
-                id: categoryItem?.id,
+                title: item?.label,
+                id: item?.id,
               })
             }
             item={item}
