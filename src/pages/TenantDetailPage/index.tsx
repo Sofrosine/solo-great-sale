@@ -34,7 +34,7 @@ const TenantDetailPage: React.FC<Props> = ({navigation, route}) => {
 
   useEffect(() => {
     if (!title) {
-      navigation.setParams({title: tenantData?.nama_pemilik});
+      navigation.setParams({title: tenantData?.nama_toko});
     }
   }, [tenantData]);
 
@@ -52,13 +52,10 @@ const TenantDetailPage: React.FC<Props> = ({navigation, route}) => {
             />
             <View marginTop={24} />
             <Text color={Color.PRIMARY} family="latoBold" size={16}>
-              {tenantData?.nama_pemilik} ({tenantData?.nama_toko})
+              {tenantData?.nama_toko}
             </Text>
             <View marginBottom={8} />
-            <Text>
-              {tenantData?.kode_tenant} | {tenantData?.no_telp_perusahaan} |{' '}
-              {tenantData?.email_perusahaan}
-            </Text>
+            <Text>{tenantData?.email_perusahaan}</Text>
             <View marginBottom={8} />
             <Text size={12} color={Color.GREY_TEXT}>
               {tenantData?.alamat}

@@ -65,13 +65,13 @@ const CategoryDetailPage: FC<Props> = ({route, navigation}) => {
                 onPress={() =>
                   navigation.navigate('TenantDetailPage', {
                     id: item?.id_tenant,
-                    title: item?.tenant?.nama_pemilik,
+                    title: item?.tenant?.nama_toko,
                   })
                 }
                 image={
                   'http://transaksi.sologreatsale.com' + item?.tenant?.path_logo
                 }
-                title={item?.tenant?.nama_pemilik}
+                title={item?.tenant?.nama_toko}
               />
             </View>
           )}

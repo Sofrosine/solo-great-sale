@@ -49,11 +49,11 @@ const HomePage: FC<Props> = ({navigation}) => {
                 onPress={() =>
                   navigation.navigate('TenantDetailPage', {
                     id: item?.id,
-                    title: item?.nama_pemilik,
+                    title: item?.nama_toko,
                   })
                 }
                 image={`https://transaksi.sologreatsale.com${item?.path_logo}`}
-                title={item?.nama_pemilik}
+                title={item?.nama_toko}
               />
             )}
           />

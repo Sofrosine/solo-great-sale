@@ -30,7 +30,7 @@ const CategoryPage: FC<Props> = ({navigation}) => {
           />
         )}
         ItemSeparatorComponent={() => <View marginY={0} />}
-        contentContainerStyle={tailwind('py-4')}
+        contentContainerStyle={tailwind('pt-4 pb-12')}
       />
     </View>
   );
