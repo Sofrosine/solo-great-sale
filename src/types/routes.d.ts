@@ -5,6 +5,7 @@ type RootStackParamList = {
     id: number;
     title: string;
   };
+  ForgotPasswordPage: undefined;
   HomePage: undefined;
   WebviewPage: {
     link: string;

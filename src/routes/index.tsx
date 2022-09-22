@@ -27,6 +27,7 @@ import TransactionDetailPage from 'pages/TransactionDetailPage';
 import TransactionPage from 'pages/TransactionPage';
 import TransactionDirectPage from 'pages/TransactionDirectPage';
 import View from 'components/View';
+import ForgotPasswordPage from 'pages/ForgotPasswordPage';
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
 
@@ -271,6 +272,19 @@ const Main = () => {
                     />
                   }
                   center={<Text family="latoBold">Daftar Akun</Text>}
+                />
+              );
+            },
+          }}
+        />
+        <Stack.Screen
+          name="ForgotPasswordPage"
+          component={ForgotPasswordPage}
+          options={{
+            header: () => {
+              return (
+                <HeaderView
+                  center={<Text family="latoBold">Atur Ulang Kata Sandi</Text>}
                 />
               );
             },

@@ -3,6 +3,7 @@ export default {
   CATEGORIES: '/mobile/categories',
   CHECKOUT: '/mobile/confirm_checkout',
   FILTER_CATEGORY: '/mobile/filter_produk_by_category',
+  FORGOT_PASSWORD: '/mobile/reset-password',
   KABUPATEN: '/mobile/kabupaten',
   KECAMATAN: '/mobile/kecamatan',
   KELURAHAN: '/mobile/kelurahan',

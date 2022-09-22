@@ -173,6 +173,21 @@ const ProfilePage: React.FC<Props> = ({navigation}) => {
             />
             <View marginTop={8} style={tailwind('items-end')}>
               <Text size={12}>
+                Lupa kata sandi?{' '}
+                <Text
+                  onPress={() => navigation.navigate('ForgotPasswordPage')}
+                  size={12}
+                  family="latoBold"
+                  color={Color.PRIMARY}>
+                  Atur ulang
+                </Text>
+              </Text>
+            </View>
+            <View marginBottom={24} />
+            <Button onPress={handleSubmit} loading={loading} label="MASUK" />
+            <View marginBottom={8} />
+            <View marginTop={8} style={tailwind('items-center')}>
+              <Text size={12}>
                 Belum punya akun?{' '}
                 <Text
                   onPress={() => navigation.navigate('RegisterPage')}
@@ -183,8 +198,6 @@ const ProfilePage: React.FC<Props> = ({navigation}) => {
                 </Text>
               </Text>
             </View>
-            <View marginBottom={24} />
-            <Button onPress={handleSubmit} loading={loading} label="MASUK" />
           </View>
         </View>
       )}
