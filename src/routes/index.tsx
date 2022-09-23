@@ -14,7 +14,7 @@ import RegisterPage from 'pages/RegisterPage';
 import SplashPage from 'pages/SplashPage';
 import TenantDetailPage from 'pages/TenantDetailPage';
 import React from 'react';
-import {TouchableOpacity} from 'react-native';
+import {StatusBar, TouchableOpacity} from 'react-native';
 import FastImage from 'react-native-fast-image';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import Ionicons from 'react-native-vector-icons/Ionicons';
@@ -28,6 +28,8 @@ import TransactionPage from 'pages/TransactionPage';
 import TransactionDirectPage from 'pages/TransactionDirectPage';
 import View from 'components/View';
 import ForgotPasswordPage from 'pages/ForgotPasswordPage';
+import AllLogo from 'assets/images/all.png';
+import tailwind from 'tailwind-rn';
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
 
@@ -78,16 +80,22 @@ const HomeScreen = () => {
             fontFamily: 'Lato-Bold',
           },
           header: () => (
-            <HeaderView
-              left={
-                <FastImage
-                  resizeMode="contain"
-                  source={Logo}
-                  style={{width: 80, height: 40}}
-                />
-              }
-              center={<Text family="latoBold">Solo Great Sale</Text>}
-            />
+            <View
+              paddingY={4}
+              color={'rgb(0,86,104)'}
+              style={tailwind('flex-row items-center')}
+              paddingX={16}>
+              <FastImage
+                resizeMode="contain"
+                source={Logo}
+                style={{width: 40, height: 40}}
+              />
+              <FastImage
+                resizeMode="contain"
+                source={AllLogo}
+                style={{width: '100%', height: 60}}
+              />
+            </View>
           ),
         }}
         component={HomePage}
@@ -194,14 +202,8 @@ const HomeScreen = () => {
           },
           header: () => (
             <HeaderView
-              left={
-                <FastImage
-                  resizeMode="contain"
-                  source={Logo}
-                  style={{width: 80, height: 40}}
-                />
-              }
-              center={<Text family="latoBold">Solo Great Sale</Text>}
+              left={null}
+              center={<Text family="latoBold">Profile</Text>}
             />
           ),
         }}

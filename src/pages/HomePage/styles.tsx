@@ -11,6 +11,19 @@ const styles = StyleSheet.create({
     height: 40,
     width: 60,
   },
+  btnEvent: {
+    borderWidth: 1,
+    borderRadius: 8,
+    paddingVertical: 8,
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderColor: Color.GREY,
+  },
+  developerImage: {
+    height: 80,
+    width: 80,
+  },
 });
 
 export default styles;

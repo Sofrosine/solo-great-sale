@@ -2,22 +2,22 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import {setToken, setUser} from 'actions';
 import {emptyCart} from 'actions/cart-action';
+import Logo from 'assets/images/sgs.png';
 import Button from 'components/Button';
 import Text from 'components/Text';
 import TextInput from 'components/TextInput';
 import View from 'components/View';
-import {format} from 'date-fns';
 import useLogin from 'queries/auth/useLogin';
 import React, {useContext, useState} from 'react';
+import {Alert, TouchableOpacity} from 'react-native';
+import DeviceInfo from 'react-native-device-info';
+import FastImage from 'react-native-fast-image';
+import Feather from 'react-native-vector-icons/Feather';
 import {Store} from 'reducers';
 import Color from 'styles/Color';
 import tailwind from 'tailwind-rn';
 import {getSize, showToast, useForm} from 'utils';
-import Logo from 'assets/images/sgs.png';
-import FastImage from 'react-native-fast-image';
-import Feather from 'react-native-vector-icons/Feather';
 import styles from './styles';
-import {Alert, TouchableOpacity} from 'react-native';
 
 type Props = {
   navigation: NativeStackNavigationProp<RootStackParamList, 'Profile'>;
@@ -97,61 +97,68 @@ const ProfilePage: React.FC<Props> = ({navigation}) => {
   };
 
   return (
-    <View style={tailwind('flex-1 bg-white px-8')}>
+    <View style={tailwind('flex-1 bg-white')}>
       {userData?.token ? (
-        <View style={tailwind('flex-1')} paddingTop={20}>
-          <FastImage resizeMode="contain" source={Logo} style={styles.image} />
-          <View marginTop={32} style={tailwind('flex-1')}>
-            <Text size={16} family="latoBold">
-              {userData?.data?.nama_depan} {userData?.data?.nama_belakang}
-            </Text>
-            <View marginBottom={8} />
-            <Text color={Color.GREY_TEXT} size={12} family="latoBold">
-              {userData?.data?.nomor_hp}
-            </Text>
-            <View marginBottom={2} />
-            <Text color={Color.GREY_TEXT} family="latoBold" size={12}>
-              {userData?.data?.email}
-            </Text>
-            <View
-              marginTop={12}
-              style={[tailwind('border-t border-b'), {borderColor: Color.GREY}]}
-              paddingY={16}>
-              <Text>
-                Terdaftar sejak:{' '}
-                <Text family="latoBold">
-                  {format(
-                    new Date(userData?.data?.created_at ?? new Date()),
-                    'dd MMMM yyyy',
-                  )}
+        <View style={tailwind('flex-1')} paddingTop={0}>
+          <View marginTop={16} style={tailwind('flex-1')}>
+            <View paddingX={20} style={tailwind('flex-row items-center')}>
+              <FastImage
+                resizeMode="contain"
+                source={Logo}
+                style={styles.image}
+              />
+              <View style={tailwind('flex-1')} marginLeft={16}>
+                <Text size={16} family="latoBold">
+                  {userData?.data?.nama_depan} {userData?.data?.nama_belakang}
                 </Text>
-              </Text>
-              <View marginBottom={4} />
-              <Text size={14}>
-                Alamat: <Text family="latoBold">{userData?.data?.alamat}</Text>
-              </Text>
+                <View marginBottom={2} />
+                <Text color={Color.GREY_TEXT} family="latoBold" size={12}>
+                  {userData?.data?.email}
+                </Text>
+                <View marginBottom={8} />
+                <Text color={Color.GREY_TEXT} size={12} family="latoBold">
+                  {userData?.data?.nomor_hp}
+                </Text>
+              </View>
             </View>
+            <View style={styles.divider} />
             <TouchableOpacity
               onPress={() => navigation.navigate('TransactionPage')}
-              style={[
-                tailwind('flex-row mt-2 justify-between py-2 items-center'),
-              ]}>
-              <Text size={14} family="latoBold">
-                Daftar Transaksi
-              </Text>
+              style={[tailwind('flex-row justify-between items-center px-6')]}>
+              <View style={tailwind('flex-row items-center')}>
+                <Feather
+                  name="file-text"
+                  color={Color.PRIMARY}
+                  size={getSize(18)}
+                />
+                <View marginRight={14} />
+                <Text size={14} family="latoBold">
+                  Daftar Transaksi
+                </Text>
+              </View>
               <Feather
                 name="chevron-right"
-                color={Color.ALMOST_BLACK}
+                color={Color.BLACK_05}
                 size={getSize(20)}
               />
             </TouchableOpacity>
+
+            <View style={styles.divider} />
           </View>
-          <View marginBottom={40}>
+          <View marginBottom={48} paddingX={20} paddingTop={8}>
+            <Text
+              style={tailwind('text-center my-4')}
+              size={12}
+              color={
+                Color.GREY_TEXT
+              }>{`Version ${DeviceInfo.getVersion()}`}</Text>
             <Button label="Keluar" transparent onPress={showLogoutAlert} />
           </View>
         </View>
       ) : (
-        <View style={tailwind('flex-1 items-center justify-center')}>
+        <View
+          paddingX={20}
+          style={tailwind('flex-1 items-center justify-center')}>
           <Text family="latoBold" size={16}>
             Masuk
           </Text>
