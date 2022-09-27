@@ -1,5 +1,5 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import {CommonActions} from '@react-navigation/native';
+import {CommonActions, RouteProp} from '@react-navigation/native';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import {emptyCart} from 'actions/cart-action';
 import Button from 'components/Button';
@@ -27,10 +27,15 @@ import {currencyConverter, deviceWidth, showToast} from 'utils';
 import styles from './styles';
 
 type Props = {
-  navigation: NativeStackNavigationProp<RootStackParamList, 'Cart'>;
+  navigation: NativeStackNavigationProp<
+    RootStackParamList,
+    'TransactionDirectPage'
+  >;
+  route: RouteProp<RootStackParamList, 'TransactionDirectPage'>;
 };
 
-const TransactionDirectPage: FC<Props> = ({navigation}) => {
+const TransactionDirectPage: FC<Props> = ({navigation, route}) => {
+  const {tenantId} = route?.params || {};
   const {cart, user} = useContext(Store);
 
   const [selectedPayment, setPayment] = useState<any>(null);
@@ -49,6 +54,7 @@ const TransactionDirectPage: FC<Props> = ({navigation}) => {
 
   const {mutate: checkoutMutate} = useCheckout({token: userData?.token});
   const {mutateAsync: qrisMutate} = usePostQrisGenerate();
+  console.log(userData, tenantId);
 
   const createThreeButtonAlert = () =>
     Alert.alert('Pilih file', 'Pilih option untuk upload foto', [
@@ -122,14 +128,21 @@ const TransactionDirectPage: FC<Props> = ({navigation}) => {
         formData?.append(`carts[${index}][harga]`, totalPrice);
         formData?.append(`carts[${index}][quantity]`, 1);
         formData?.append(`carts[${index}][id]`, val?.id);
-        formData?.append(`carts[${index}][id_tenant]`, val?.id_tenant);
+        formData?.append(`carts[${index}][id_tenant]`, tenantId);
       });
+
       formData?.append('bukti_transaksi', {
         uri: paymentProof,
         type: 'image/jpeg', // or photo.type
         name: 'proof.jpg',
       });
       formData?.append('is_qris', isQris);
+      formData?.append(
+        'nama',
+        `${userData?.data?.nama_depan} ${userData?.data?.nama_belakang}`,
+      );
+      formData?.append('alamat', userData?.data?.alamat);
+      formData?.append('no_hp', userData?.data?.nomor_hp);
 
       checkoutMutate(
         {
@@ -207,7 +220,6 @@ ${tocData?.data}
               inputValue={totalPrice}
               onChangeText={val => {
                 setTotalPrice(Number(val));
-                console.log(val);
               }}
             />
           )}

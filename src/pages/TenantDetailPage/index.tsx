@@ -102,7 +102,9 @@ const TenantDetailPage: React.FC<Props> = ({navigation, route}) => {
               showToast('Harap masuk terlebih dahulu');
               navigation.navigate('Profile');
             } else {
-              navigation.navigate('TransactionDirectPage');
+              navigation.navigate('TransactionDirectPage', {
+                tenantId: tenantData?.id,
+              });
             }
           }}
           label="Transaksi Langsung"

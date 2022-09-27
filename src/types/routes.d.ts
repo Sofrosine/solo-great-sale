@@ -26,6 +26,8 @@ type RootStackParamList = {
   TransactionDetailPage: {
     id: number;
   };
-  TransactionDirectPage: undefined;
+  TransactionDirectPage: {
+    tenantId: string;
+  };
   TransactionPage: undefined;
 };

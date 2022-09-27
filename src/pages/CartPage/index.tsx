@@ -163,6 +163,12 @@ const CartPage: FC<Props> = ({navigation}) => {
         name: 'proof.jpg',
       });
       formData?.append('is_qris', isQris);
+      formData?.append(
+        'nama',
+        `${userData?.data?.nama_depan} ${userData?.data?.nama_belakang}`,
+      );
+      formData?.append('alamat', userData?.data?.alamat);
+      formData?.append('no_hp', userData?.data?.nomor_hp);
 
       checkoutMutate(
         {

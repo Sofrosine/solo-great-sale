@@ -14,12 +14,14 @@ import ContentLoader from 'react-native-easy-content-loader';
 import FastImage from 'react-native-fast-image';
 import Color from 'styles/Color';
 import tailwind from 'tailwind-rn';
+import IntegraLogo from 'assets/images/media-integra-logo.png';
 import DeLogo from 'assets/images/de-logo.png';
 import EdusiftLogo from 'assets/images/edusift-logo.png';
 import STALogo from 'assets/images/sta-logo.png';
 
 import {currencyConverter} from 'utils';
 import styles from './styles';
+import {TOP_ADS_DATA} from 'constants';
 
 type Props = {
   navigation: NativeStackNavigationProp<RootStackParamList, 'HomePage'>;
@@ -65,6 +67,17 @@ const HomePage: FC<Props> = ({navigation}) => {
               Virtual SGS
             </Text>
           </TouchableOpacity>
+        </View>
+        <View
+          style={tailwind('flex-row items-center justify-center')}
+          paddingY={8}>
+          {TOP_ADS_DATA.map(item => (
+            <FastImage
+              resizeMode="contain"
+              source={item?.source}
+              style={[styles.developerImage, tailwind('mx-2')]}
+            />
+          ))}
         </View>
         <View>
           <Text style={tailwind('px-4')} family="latoBold" size={14}>
@@ -183,6 +196,11 @@ const HomePage: FC<Props> = ({navigation}) => {
           <View
             style={tailwind('flex-row items-center justify-center')}
             paddingY={8}>
+            <FastImage
+              resizeMode="contain"
+              source={IntegraLogo}
+              style={styles.developerImage}
+            />
             <FastImage
               resizeMode="contain"
               source={DeLogo}

@@ -21,8 +21,8 @@ const styles = StyleSheet.create({
     borderColor: Color.GREY,
   },
   developerImage: {
-    height: 80,
-    width: 80,
+    height: 84,
+    width: 84,
   },
 });
 
