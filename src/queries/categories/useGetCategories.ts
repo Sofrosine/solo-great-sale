@@ -9,9 +9,9 @@ export default function useGetCategories() {
       const response = await get(API_URL.CATEGORIES, '', {signal});
       let arr: any[] = [];
       response?.data?.map((item: any) => {
-        if (item?.child?.length) {
+        if (item?.induks?.length) {
           const sub: any[] = [];
-          item?.child?.map((val: any) =>
+          item?.induks?.map((val: any) =>
             sub.push({
               id: val?.id,
               label: val?.nama_kategori,
@@ -28,7 +28,7 @@ export default function useGetCategories() {
             id: item?.id,
             icon: item?.icon,
             label: `${item?.nama_kategori} (${item?.total_tenant})`,
-            sub: item?.child,
+            sub: item?.induks,
           });
         }
       });

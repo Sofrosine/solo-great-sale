@@ -7,7 +7,7 @@ export default function useGetTenantByCategory({id}: any) {
     ['tenantByCategory'],
     async ({signal}) => {
       const response = await get(
-        API_URL.TENANT_BY_CATEGORY + `/${id}/2000`,
+        API_URL.TENANT_BY_CATEGORY + `/${id}/20000`,
         '',
         {
           signal,

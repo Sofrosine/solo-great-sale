@@ -15,7 +15,7 @@ type Props = {
     icon?: string;
     id: string;
   };
-  onPress: (item: any) => void;
+  onPress: (item: any, isSub?: boolean) => void;
   outline?: boolean;
   outlineLabel?: string;
   labelSize?: number;
@@ -95,7 +95,7 @@ const Dropdown: FC<Props> = ({
           <TouchableOpacity
             key={index}
             onPress={() => {
-              onPress && onPress(subItem);
+              onPress && onPress(subItem, true);
               setExpand(false);
               // layoutAnimation();
             }}

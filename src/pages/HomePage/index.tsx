@@ -22,6 +22,9 @@ import STALogo from 'assets/images/sta-logo.png';
 import {currencyConverter} from 'utils';
 import styles from './styles';
 import {TOP_ADS_DATA} from 'constants';
+import TopSponsorHome from 'components/TopSponsorHome';
+import useGetSponsor2 from 'queries/content/useGetSponsor';
+import Button from 'components/Button';
 
 type Props = {
   navigation: NativeStackNavigationProp<RootStackParamList, 'HomePage'>;
@@ -35,6 +38,7 @@ const HomePage: FC<Props> = ({navigation}) => {
     useGetProductRecommendation();
   const {data: newsData, isFetching: newsFetching} = useGetNews();
   const {data: sponsorData} = useGetSponsor();
+  const {data: sponsor2Data} = useGetSponsor2();
 
   return (
     <View style={tailwind('flex-1 bg-white')}>
@@ -68,16 +72,26 @@ const HomePage: FC<Props> = ({navigation}) => {
             </Text>
           </TouchableOpacity>
         </View>
-        <View
-          style={tailwind('flex-row items-center justify-center')}
-          paddingY={8}>
-          {TOP_ADS_DATA.map(item => (
-            <FastImage
-              resizeMode="contain"
-              source={item?.source}
-              style={[styles.developerImage, tailwind('mx-2')]}
-            />
-          ))}
+        <View marginTop={8} marginBottom={16}>
+          <ScrollView contentContainerStyle={tailwind('px-4')} horizontal>
+            {sponsor2Data?.map((item: any) => (
+              <FastImage
+                key={item?.image_path}
+                source={{
+                  uri: `https://transaksi.sologreatsale.com${item?.image_path}`,
+                }}
+                style={{width: 80, height: 80, marginRight: 24}}
+                resizeMode="contain"
+              />
+            ))}
+          </ScrollView>
+        </View>
+        <View paddingX={20} marginBottom={24}>
+          <Button
+            onPress={() => navigation.navigate('SearchPage')}
+            label="Cari Tenant"
+            transparent
+          />
         </View>
         <View>
           <Text style={tailwind('px-4')} family="latoBold" size={14}>

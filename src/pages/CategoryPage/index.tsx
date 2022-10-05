@@ -20,12 +20,20 @@ const CategoryPage: FC<Props> = ({navigation}) => {
         keyExtractor={(_, index) => index.toString()}
         renderItem={({item}) => (
           <Dropdown
-            onPress={categoryItem =>
-              navigation.navigate('CategoryDetailPage', {
-                title: item?.label,
-                id: item?.id,
-              })
-            }
+            onPress={(categoryItem, isSub) => {
+              if (isSub) {
+                navigation.navigate('SubCategoryDetailPage', {
+                  title: categoryItem?.label,
+                  id: item?.id,
+                  subId: categoryItem?.id,
+                });
+              } else {
+                navigation.navigate('CategoryDetailPage', {
+                  title: item?.label,
+                  id: item?.id,
+                });
+              }
+            }}
             item={item}
           />
         )}

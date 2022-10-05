@@ -5,9 +5,10 @@ import HeaderView from 'components/HeaderView';
 import TextInput from 'components/TextInput';
 import View from 'components/View';
 import useGetTenantByCategory from 'queries/tenant/useGetTenantByCategory';
+import useGetTenantBySubCategory from 'queries/tenant/useGetTenantBySubCategory';
 
 import React, {FC, useEffect, useLayoutEffect, useState} from 'react';
-import {Alert, FlatList, TouchableOpacity} from 'react-native';
+import {FlatList, TouchableOpacity} from 'react-native';
 import ContentLoader from 'react-native-easy-content-loader';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import Color from 'styles/Color';
@@ -17,26 +18,26 @@ import styles from './styles';
 type Props = {
   navigation: NativeStackNavigationProp<
     RootStackParamList,
-    'CategoryDetailPage'
+    'SubCategoryDetailPage'
   >;
-  route: RouteProp<RootStackParamList, 'CategoryDetailPage'>;
+  route: RouteProp<RootStackParamList, 'SubCategoryDetailPage'>;
 };
 
-const CategoryDetailPage: FC<Props> = ({route, navigation}) => {
-  const {id, title} = route?.params || {};
+const SubCategoryDetailPage: FC<Props> = ({route, navigation}) => {
+  const {id, title, subId} = route?.params || {};
 
   const [realData, setRealData] = useState([]);
   const [tenantData, setTenantData] = useState<any>([]);
 
-  const {data: tenantByCategoryData, isFetching: isCategoryFetching} =
-    useGetTenantByCategory({id});
+  const {data: tenantBySubCategoryData, isFetching: isCategoryFetching} =
+    useGetTenantBySubCategory({id, subId});
 
   useEffect(() => {
-    if (tenantByCategoryData) {
-      setTenantData(tenantByCategoryData);
-      setRealData(tenantByCategoryData);
+    if (tenantBySubCategoryData) {
+      setTenantData(tenantBySubCategoryData);
+      setRealData(tenantBySubCategoryData);
     }
-  }, [tenantByCategoryData]);
+  }, [tenantBySubCategoryData]);
 
   useLayoutEffect(() => {
     navigation.setOptions({
@@ -80,7 +81,7 @@ const CategoryDetailPage: FC<Props> = ({route, navigation}) => {
         <FlatList
           numColumns={2}
           data={tenantData}
-          contentContainerStyle={tailwind('py-8')}
+          contentContainerStyle={tailwind('py-20')}
           keyExtractor={(_, index) => index.toString()}
           ItemSeparatorComponent={() => <View marginY={8} />}
           renderItem={({item}) => (
@@ -105,4 +106,4 @@ const CategoryDetailPage: FC<Props> = ({route, navigation}) => {
   );
 };
 
-export default CategoryDetailPage;
+export default SubCategoryDetailPage;

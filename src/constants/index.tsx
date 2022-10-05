@@ -1,7 +1,3 @@
-import TopAds1 from 'assets/images/top-ads-1.jpeg';
-import TopAds2 from 'assets/images/top-ads-2.png';
-import TopAds3 from 'assets/images/top-ads-3.png';
-
 export const PAYMENT_METHOD = [
   {
     id: '1',
@@ -60,17 +56,5 @@ export const INVOICE_LIST = [
   },
   {
     title: 'Pembeli',
-  },
-];
-
-export const TOP_ADS_DATA = [
-  {
-    source: TopAds1,
-  },
-  {
-    source: TopAds2,
-  },
-  {
-    source: TopAds3,
   },
 ];

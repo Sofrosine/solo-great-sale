@@ -18,7 +18,13 @@ type RootStackParamList = {
   Profile: undefined;
   RegisterPage: undefined;
   ScanTenantPage: undefined;
+  SearchPage: undefined;
   SplashPage: undefined;
+  SubCategoryDetailPage: {
+    id: number;
+    title: string;
+    subId: number;
+  };
   TenantDetailPage: {
     id: string;
     title?: string;

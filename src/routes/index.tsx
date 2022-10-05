@@ -14,7 +14,7 @@ import RegisterPage from 'pages/RegisterPage';
 import SplashPage from 'pages/SplashPage';
 import TenantDetailPage from 'pages/TenantDetailPage';
 import React from 'react';
-import {StatusBar, TouchableOpacity} from 'react-native';
+import {TouchableOpacity} from 'react-native';
 import FastImage from 'react-native-fast-image';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import Ionicons from 'react-native-vector-icons/Ionicons';
@@ -30,6 +30,8 @@ import View from 'components/View';
 import ForgotPasswordPage from 'pages/ForgotPasswordPage';
 import AllLogo from 'assets/images/all.png';
 import tailwind from 'tailwind-rn';
+import SubCategoryDetailPage from 'pages/SubCategoryDetailPage';
+import SearchPage from 'pages/SearchPage';
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
 
@@ -234,6 +236,38 @@ const Main = () => {
         <Stack.Screen
           name="CategoryDetailPage"
           component={CategoryDetailPage}
+        />
+        <Stack.Screen
+          name="SearchPage"
+          component={SearchPage}
+          options={{
+            header: () => {
+              return (
+                <HeaderView
+                  center={<Text family="latoBold">Cari Tenant</Text>}
+                  right={<View />}
+                />
+              );
+            },
+          }}
+        />
+        <Stack.Screen
+          name="ScanTenantPage"
+          component={ScanTenantPage}
+          options={{
+            header: () => {
+              return (
+                <HeaderView
+                  center={<Text family="latoBold">Scan Tenant</Text>}
+                  right={<View />}
+                />
+              );
+            },
+          }}
+        />
+        <Stack.Screen
+          name="SubCategoryDetailPage"
+          component={SubCategoryDetailPage}
         />
         <Stack.Screen
           name="ProductDetailPage"
