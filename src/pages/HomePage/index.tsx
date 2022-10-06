@@ -72,8 +72,8 @@ const HomePage: FC<Props> = ({navigation}) => {
             </Text>
           </TouchableOpacity>
         </View>
-        <View marginTop={8} marginBottom={16}>
-          <ScrollView contentContainerStyle={tailwind('px-4')} horizontal>
+        <View marginTop={8} marginBottom={24}>
+          {/* <ScrollView contentContainerStyle={tailwind('px-4')} horizontal>
             {sponsor2Data?.map((item: any) => (
               <FastImage
                 key={item?.image_path}
@@ -84,7 +84,9 @@ const HomePage: FC<Props> = ({navigation}) => {
                 resizeMode="contain"
               />
             ))}
-          </ScrollView>
+          </ScrollView> */}
+
+          <BannerHome showPagination={false} data={sponsor2Data} />
         </View>
         <View paddingX={20} marginBottom={24}>
           <Button

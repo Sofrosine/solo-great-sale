@@ -9,18 +9,18 @@ import tailwind from 'tailwind-rn';
 
 type Props = {
   data: any;
+  showPagination?: boolean;
 };
 
-const BannerHome: FC<Props> = ({data}) => {
-  const [index, setIndex] = useState(0);
+const BannerHome: FC<Props> = ({data, showPagination = true}) => {
   return (
     <View style={styles.container}>
       <Swiper
-        index={index}
-        onIndexChanged={i => setIndex(i)}
+        autoplay={true}
+        autoplayTimeout={2}
+        showsPagination={showPagination}
         activeDotColor={Color.PRIMARY}
-        paginationStyle={styles.pagination}
-        autoplay={false}>
+        paginationStyle={styles.pagination}>
         {data?.map((item: any, indexData: number) => (
           <TouchableOpacity
             style={tailwind('px-4')}
@@ -32,6 +32,7 @@ const BannerHome: FC<Props> = ({data}) => {
                 priority: FastImage.priority.high,
               }}
               style={styles.image}
+              resizeMode="contain"
             />
           </TouchableOpacity>
         ))}
